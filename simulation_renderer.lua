@@ -257,17 +257,19 @@ renderer.render_right_gui = function(state)
     love.graphics.setColor(render_constants.colors.buy_area_unavailable)
   end
   local rect = renderer.get_buy_button_rect(state)
-  love.graphics.rectangle('fill', rect[1], rect[2], rect[3], rect[4])
-
-  love.graphics.setColor{0,0,0}
-  local text = love.graphics.newText(love.graphics.getFont(), "Next\nlevel")
-  local textWidth, textHeight = text:getDimensions()
-  love.graphics.draw(text, rect[1] + rect[3]/2 - textWidth/2, rect[2] + rect[4]/2 - textHeight/2)
-
-
-  if simulation.all_sinks_satisfied(state) and state.tick % 60 < 30 then
-    love.graphics.setColor{1,1,0,0.5}
+  if not state.finished then
     love.graphics.rectangle('fill', rect[1], rect[2], rect[3], rect[4])
+
+    love.graphics.setColor{0,0,0}
+    local text = love.graphics.newText(love.graphics.getFont(), "Next\nlevel")
+    local textWidth, textHeight = text:getDimensions()
+    love.graphics.draw(text, rect[1] + rect[3]/2 - textWidth/2, rect[2] + rect[4]/2 - textHeight/2)
+  
+  
+    if simulation.all_sinks_satisfied(state) and state.tick % 60 < 30 then
+      love.graphics.setColor{1,1,0,0.5}
+      love.graphics.rectangle('fill', rect[1], rect[2], rect[3], rect[4])
+    end
   end
 
   local y = 300

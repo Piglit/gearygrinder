@@ -17,6 +17,7 @@ simulation.create_state = function()
     areas_available = 1,
     next_price = 0,
     selected_tool = "gear",
+    finished = false,
   }
 end
 

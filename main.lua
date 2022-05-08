@@ -50,11 +50,11 @@ end
 
 
 function love.draw()
-  if state.areas_available > #levels then
-    love.graphics.setColor{1,1,1}
-    love.graphics.draw(win_screen)
-    return
-  end
+--  if state.areas_available > #levels then
+--    love.graphics.setColor{1,1,1}
+--    love.graphics.draw(win_screen)
+--    return
+--  end
 
   renderer.render_gui_background()
 
@@ -164,12 +164,15 @@ function love.mousepressed(x,y,button)
 
   if rect_clicked(x, y, buy_button) then
     if simulation.all_sinks_satisfied(state) then
-      state.areas_available = state.areas_available + 1
+      if state.areas_available >= #levels then
+        state.finished = true
+      else
+        state.areas_available = state.areas_available + 1
 
-      local level_index = math.min(state.areas_available, #levels)
-      levels[level_index](state)
-
-      state.flash_up_button = true
+        local level_index = math.min(state.areas_available, #levels)
+        levels[level_index](state)
+        state.flash_up_button = true
+      end
     end
   else
     local result = placement.mouse_pressed(state,w_x,w_y,button)
