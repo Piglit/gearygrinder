@@ -97,13 +97,17 @@ simulation.get_sink_percentage_satisfied = function(sink)
 
   for _, sink_part in pairs(sink.components) do
     local abs_speed = math.abs(sink_part.current_speed)
-
     local this_percentage = 0
     if abs_speed >= sink_part.speed_min and abs_speed <= sink_part.speed_max then
       this_percentage = math.min(abs_speed, sink_part.speed_max) / sink_part.speed_max
     end
 
     percentage_satisfied = math.min(this_percentage, percentage_satisfied)
+    if abs_speed ~= sink_part.last_speed then
+        print("Sink Part " .. sink_part.global_idx .. ": " .. abs_speed .. "/[" .. sink_part.speed_min .. "-" .. sink_part.speed_max.."]  -  ".. (percentage_satisfied * 100) .."%")
+        sink_part.last_speed = abs_speed
+    end
+
   end
 
   return percentage_satisfied
@@ -111,14 +115,13 @@ end
 
 simulation.all_sinks_satisfied = function(state)
   local all_complete = true
-  for _, sink in pairs(state.sinks) do
+  for idx, sink in pairs(state.sinks) do
     local percent_complete = simulation.get_sink_percentage_satisfied(sink)
     if percent_complete == 0 then
       all_complete = false
       break
     end
   end
-
   return all_complete
 end
 
@@ -132,9 +135,10 @@ simulation.update_sink = function(state, sink)
   end
 end
 
+sink_part_idx = 0
 simulation.add_sink_part = function(state, sink, name, size, speed_min, speed_max, position)
   assert(sink.type == "sink")
-
+  sink_part_idx = sink_part_idx +1
   local new_sink_component =
   {
     type = "sink_part",
@@ -142,6 +146,9 @@ simulation.add_sink_part = function(state, sink, name, size, speed_min, speed_ma
     size = size,
     speed_min = speed_min,
     speed_max = speed_max,
+    speed_target = speed_max,
+    speed_last = 0,
+    global_idx = sink_part_idx,
     position = position,
     rotation = 0,
     parent = nil,

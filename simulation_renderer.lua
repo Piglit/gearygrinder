@@ -160,7 +160,7 @@ local draw_sink_indicators = function(machine)
       speedText = string.format("%.2f", absSpeed)
     end
 
-    local text = love.graphics.newText(love.graphics.getFont(), speedText .. " / " .. gear.speed_max)
+    local text = love.graphics.newText(love.graphics.getFont(), speedText .. " / " .. gear.speed_target)
     local textWidth, textHeight = text:getDimensions()
 
     if absSpeed < gear.speed_min then

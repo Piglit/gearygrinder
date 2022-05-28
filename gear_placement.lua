@@ -162,7 +162,7 @@ placement.mouse_pressed = function(state,x,y,button)
   local result = nil
   local target_gear = collisions.find_component_at(state,x,y)
   if target_gear then
-    print("clicked on a "..target_gear.type)
+    --print("clicked on a "..target_gear.type)
   end
 
   if button == 1 and state.selected_tool == 'splitter' then

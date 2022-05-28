@@ -128,6 +128,9 @@ local move_camera = function(key)
 end
 
 function love.keypressed(key)
+  if key == "escape" then
+	love.event.quit()
+  end
   move_camera(key)
 end
 
@@ -162,6 +165,7 @@ function love.mousepressed(x,y,button)
     end
   end
 
+  print(#state.all_components)
   if rect_clicked(x, y, buy_button) then
     if simulation.all_sinks_satisfied(state) then
       if state.areas_available >= #levels then
